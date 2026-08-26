@@ -302,7 +302,7 @@
     opacity: 0.65;
   }
 
-  /* ── Coach Briefing Dedicated Page View (Optimized for no scrolling) ── */
+  /* ── Coach Briefing Dedicated Page View (Full uncropped height) ── */
   .briefing-page {
     display: none;
     max-width: 900px;
@@ -317,7 +317,7 @@
   }
 
   .briefing-header {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
 
   .briefing-header h2 {
@@ -335,24 +335,22 @@
   .briefing-video-card {
     background: var(--surface);
     border-radius: 20px;
-    padding: 18px 24px;
+    padding: 24px;
     box-shadow: 0 15px 35px rgba(15,46,43,0.08);
     border: 1px solid #DCE7E2;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
   }
 
   .iframe-container {
     position: relative;
     width: 100%;
-    /* Limits height so the full video and buttons fit comfortably on standard screens */
-    max-height: 52vh;
-    aspect-ratio: 16/9;
+    /* Removed max-height restriction so the full iframe renders natively */
+    aspect-ratio: 16/10; 
     background: #000;
     border-radius: 14px;
     overflow: hidden;
-    margin: 0 auto;
   }
 
   .iframe-container iframe {
@@ -365,7 +363,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 2px;
   }
 
   @media (max-width: 860px) {
