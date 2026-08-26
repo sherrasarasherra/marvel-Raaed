@@ -302,7 +302,7 @@
     opacity: 0.65;
   }
 
-  /* ── Coach Briefing Dedicated Page View (Full uncropped height) ── */
+  /* ── Coach Briefing Dedicated Page View (Extra Long Container) ── */
   .briefing-page {
     display: none;
     max-width: 900px;
@@ -346,8 +346,8 @@
   .iframe-container {
     position: relative;
     width: 100%;
-    /* Removed max-height restriction so the full iframe renders natively */
-    aspect-ratio: 16/10; 
+    /* Substantially lengthened container aspect ratio to prevent internal scrollbars */
+    aspect-ratio: 16 / 13; 
     background: #000;
     border-radius: 14px;
     overflow: hidden;
@@ -357,6 +357,7 @@
     width: 100%;
     height: 100%;
     border: none;
+    overflow: hidden;
   }
 
   .briefing-actions {
