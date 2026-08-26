@@ -290,7 +290,7 @@
   /* ── Coach Briefing Dedicated Page View ── */
   .briefing-page {
     display: none;
-    max-width: 960px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 10px 24px 40px;
     animation: fadeIn 0.3s ease-in-out;
@@ -317,27 +317,18 @@
     color: var(--ink-muted);
   }
 
-  /* Side-by-side layout wrapping buttons and video card */
-  .briefing-layout {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 20px;
-  }
-
   .briefing-video-card {
     background: var(--surface);
     border-radius: 20px;
     padding: 20px 24px;
     box-shadow: 0 15px 35px rgba(15,46,43,0.08);
     border: 1px solid #DCE7E2;
-    width: 100%;
   }
 
   .iframe-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    height: 510px; /* Fixed height eliminates iframe scrollbars completely */
     background: #000;
     border-radius: 14px;
     overflow: hidden;
@@ -347,16 +338,14 @@
     width: 100%;
     height: 100%;
     border: none;
+    overflow: hidden;
   }
 
-  @media (max-width: 900px) {
-    .briefing-layout {
-      grid-template-columns: 1fr;
-    }
-    .briefing-actions-left, .briefing-actions-right {
-      display: flex;
-      justify-content: center;
-    }
+  .briefing-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px; /* Sits right below the video box cleanly */
   }
 
   @media (max-width: 860px) {
@@ -458,20 +447,15 @@
     <p>Review the guidelines below carefully, then proceed directly to your live interview with Dr. Ahmed.</p>
   </div>
 
-  <div class="briefing-layout">
-    <div class="briefing-actions-left">
-      <button class="cta-secondary" onclick="goBackToDashboard()">&larr; Back to setup</button>
+  <div class="briefing-video-card">
+    <div class="iframe-container">
+      <iframe src="https://tavus.video/6a30ca742c" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
     </div>
+  </div>
 
-    <div class="briefing-video-card">
-      <div class="iframe-container">
-        <iframe src="https://tavus.video/6a30ca742c" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
-      </div>
-    </div>
-
-    <div class="briefing-actions-right">
-      <button class="cta-main" onclick="launchSession()">Proceed to Live Avatar &rarr;</button>
-    </div>
+  <div class="briefing-actions">
+    <button class="cta-secondary" onclick="goBackToDashboard()">&larr; Back to setup</button>
+    <button class="cta-main" onclick="launchSession()">Proceed to Live Avatar &rarr;</button>
   </div>
 </div>
 
