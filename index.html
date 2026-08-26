@@ -160,6 +160,19 @@
   .cta-main:hover { background: #A9E1D0; }
   .cta-main:active { transform: scale(0.97); }
 
+  .cta-secondary {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    background: transparent;
+    color: var(--navy-deep);
+    border: 1px solid #DCE7E2;
+    padding: 14px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .cta-secondary:hover { background: rgba(0,0,0,0.03); }
+
   .cta-arrow {
     width: 46px;
     height: 46px;
@@ -289,6 +302,64 @@
     opacity: 0.65;
   }
 
+  /* ── Modal overlay for Tavus Video ─────── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 33, 31, 0.85);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-card {
+    background: var(--surface);
+    border-radius: 24px;
+    padding: 32px;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .modal-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    color: var(--navy-deep);
+  }
+
+  .modal-card p {
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  .iframe-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
   @media (max-width: 860px) {
     .hero { grid-template-columns: 1fr; }
     .hero-photo { order: -1; }
@@ -305,14 +376,14 @@
 <div class="shell">
 
   <div class="topbar">
-    <div class="brand">Clinical Rounds<span>Marvel Automations · Med Rep Training</span></div>
+    <div class="brand">Medical Rep. Simulator<span>Marvel Solutions</span></div>
     <div class="top-status" id="statusTag">SESSION READY</div>
   </div>
 
   <div class="hero">
     <div class="hero-copy">
       <h1>Meet the<br><em>doctor</em>.</h1>
-      <p class="lede">Pitch a real physician persona. Dr. Ahmed wants numbers, not adjectives — bring your evidence.</p>
+      <p class="lede">Pitch a real physician persona in our latest simulation. They want numbers, not adjectives — so bring your evidence!</p>
       <div class="pill-row">
         <div class="pill"><span class="dot a">✓</span> Evidence required</div>
         <div class="pill"><span class="dot b">i</span> Coached briefing first</div>
@@ -323,7 +394,7 @@
       </div>
     </div>
     <div class="hero-photo">
-      <img src="https://images.unsplash.com/photo-1758691463582-11aea602cd4a?fm=jpg&q=80&w=800&auto=format&fit=crop" alt="Smiling physician with stethoscope">
+      <img src="doctor-patient.jpeg" alt="Physician consulting with a patient">
     </div>
   </div>
 
@@ -359,11 +430,11 @@
     <div class="tile coral">
       <div>
         <h3>Live encounter</h3>
-        <p>Dr. Ahmed — White Hat. Skeptical, evidence-driven. Enter the room and make your case, on camera.</p>
+        <p>Start your session with Dr. Ahmed. But first, a few words from your coach Malik to guide you. Good luck!</p>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <span class="status-tag">Step 03</span>
-        <button class="circ" id="launchBtn" disabled onclick="launchSession()">→</button>
+        <button class="circ" id="launchBtn" disabled onclick="openCoachModal()">→</button>
       </div>
     </div>
 
@@ -380,6 +451,21 @@
 
 </div>
 
+<!-- Tavus Coach Briefing Video Modal -->
+<div id="coachModal" class="modal-overlay" style="display: none;">
+  <div class="modal-card">
+    <h3>Coach Malik's Briefing</h3>
+    <p>Review your data targets and pitch guidelines before joining Dr. Ahmed.</p>
+    <div class="iframe-container">
+      <iframe src="https://tavus.video/6a30ca742c" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+    </div>
+    <div class="modal-actions">
+      <button class="cta-secondary" onclick="closeCoachModal()">Back</button>
+      <button class="cta-main" onclick="launchSession()">Proceed to Live Avatar &rarr;</button>
+    </div>
+  </div>
+</div>
+
 <script>
   // ── Configuration ──────────────────────────────────────────
   const START_SESSION_URL = "https://auto.marvelwall.com/webhook/start-med-rep-session";
@@ -394,6 +480,15 @@
     document.getElementById('launchBtn').disabled = false;
     document.getElementById('statusTag').textContent =
       lang === 'english' ? 'DR. AHMED · ENGLISH' : 'DR. AHMED · ARABIC';
+  }
+
+  function openCoachModal() {
+    if (!selectedLang) return;
+    document.getElementById('coachModal').style.display = 'flex';
+  }
+
+  function closeCoachModal() {
+    document.getElementById('coachModal').style.display = 'none';
   }
 
   function launchSession() {
