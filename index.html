@@ -508,7 +508,8 @@
 
     <div class="briefing-video-card">
       <div class="video-container">
-        <video controls autoplay playsinline>
+        <!-- 🟢 Added ID so we can pause it -->
+        <video id="coachVideo" controls autoplay playsinline>
           <source src="https://raw.githubusercontent.com/sherrasarasherra/marvel-med-rep-sim/main/Coach%20Malik%20video.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -533,6 +534,15 @@
 
   let selectedLang = null;
 
+  // ── Helper to pause the coach video ──────────────────────
+  function pauseCoachVideo() {
+    const video = document.getElementById('coachVideo');
+    if (video) {
+      video.pause();
+      // Optionally reset to start: video.currentTime = 0;
+    }
+  }
+
   function selectLang(lang) {
     selectedLang = lang;
     document.querySelectorAll('.lang-choice').forEach(el => {
@@ -551,6 +561,9 @@
   }
 
   function goBackToDashboard() {
+    // Pause video when going back
+    pauseCoachVideo();
+
     document.getElementById('briefingPageView').style.display = 'none';
     document.getElementById('mainDashboard').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -579,6 +592,9 @@
       })
       .then(data => {
         if (data.conversation_url) {
+          // 🟢 Pause coach video BEFORE hiding the page
+          pauseCoachVideo();
+
           const container = document.getElementById('avatarContainer');
           const iframe = document.getElementById('avatarIframe');
           iframe.src = data.conversation_url;
