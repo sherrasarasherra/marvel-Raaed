@@ -292,6 +292,29 @@
 
   /* ── Coach Briefing Dedicated Page View ── */
   .briefing-page {
+    .avatar-call-page {
+  display: none;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 24px 40px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.avatar-call-frame-wrap {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 15px 35px rgba(15,46,43,0.08);
+  border: 1px solid #DCE7E2;
+}
+
+.avatar-call-frame-wrap iframe {
+  width: 100%;
+  height: 640px;
+  border: none;
+  border-radius: 14px;
+  display: block;
+}
     display: none;
     max-width: 1100px;
     margin: 0 auto;
@@ -464,6 +487,22 @@
     <div class="brand">RAAED<span>Role-play, AI, Automation and Engaging Digital solutions for Medical Rep</span></div>
     <div class="top-status">COACH BRIEFING</div>
   </div>
+  <div id="avatarCallView" class="avatar-call-page">
+  <div class="topbar" style="padding-left:0; padding-right:0;">
+    <div class="brand">RAAED<span>Role-play, AI, Automation and Engaging Digital solutions for Medical Rep</span></div>
+    <div class="top-status">LIVE ENCOUNTER</div>
+  </div>
+
+  <div class="briefing-header">
+    <h2>Live with Dr. Ahmed</h2>
+    <p id="avatarCallStatus">Connecting...</p>
+  </div>
+
+  <div class="avatar-call-frame-wrap">
+    <iframe id="avatarIframe"
+      allow="camera; microphone; autoplay; display-capture; fullscreen; clipboard-write"></iframe>
+  </div>
+</div>
 
   <div class="briefing-header">
     <h2>Coach Malik's Briefing</h2>
@@ -519,15 +558,33 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function launchSession() {
-    if (!selectedLang) return;
-    const params = new URLSearchParams({
-      lang: selectedLang,
-      persona: 'white_hat',
-      drug: 'panadol'
-    });
-    window.location.href = `${START_SESSION_URL}?${params.toString()}`;
+ async function launchSession() {
+  if (!selectedLang) return;
+
+  const params = new URLSearchParams({
+    lang: selectedLang,
+    persona: 'white_hat',
+    drug: 'panadol'
+  });
+
+  document.getElementById('briefingPageView').style.display = 'none';
+  document.getElementById('avatarCallView').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  try {
+    const response = await fetch(`${START_SESSION_URL}?${params.toString()}`);
+    const data = await response.json();
+
+    if (!data.conversation_url) throw new Error('No conversation_url in response');
+
+    document.getElementById('avatarIframe').src = data.conversation_url;
+    document.getElementById('avatarCallStatus').textContent = 'Ready — say hello to Dr. Ahmed.';
+  } catch (err) {
+    console.error('Failed to start session:', err);
+    document.getElementById('avatarCallStatus').textContent =
+      'Could not start the session. Please go back and try again.'; // placeholder message — flag for a nicer error page later
   }
+}
 </script>
 
 </body>
