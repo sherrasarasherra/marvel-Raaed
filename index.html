@@ -520,15 +520,51 @@
   }
 
   function launchSession() {
-    if (!selectedLang) return;
-    const params = new URLSearchParams({
-      lang: selectedLang,
-      persona: 'white_hat',
-      drug: 'panadol'
+  if (!selectedLang) return;
+  const params = new URLSearchParams({
+    lang: selectedLang,
+    persona: 'white_hat',
+    drug: 'panadol'
+  });
+  const webhookUrl = `${START_SESSION_URL}?${params.toString()}`;
+
+  fetch(webhookUrl)
+    .then(res => res.json())
+    .then(data => {
+      if (data.conversation_url) {
+        // Show the iframe container
+        const container = document.getElementById('avatarContainer');
+        const iframe = document.getElementById('avatarIframe');
+        iframe.src = data.conversation_url;
+        container.style.display = 'block';
+        // Optionally hide the briefing page or other UI
+        document.getElementById('briefingPageView').style.display = 'none';
+        document.getElementById('mainDashboard').style.display = 'none';
+      } else {
+        alert('Failed to start session. Please try again.');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Network error. Please try again.');
     });
-    window.location.href = `${START_SESSION_URL}?${params.toString()}`;
-  }
+}
+
+  <div id="avatarContainer">
+  <button onclick="closeAvatar()" style="position: absolute; top: 20px; right: 20px; z-index: 1001; background: #fff; border: none; padding: 10px 20px; border-radius: 999px; cursor: pointer;">✕ Close</button>
+  <iframe id="avatarIframe" style="width: 100%; height: 100%; border: none;"></iframe>
+</div>
+  function closeAvatar() {
+  document.getElementById('avatarContainer').style.display = 'none';
+  document.getElementById('mainDashboard').style.display = 'block';
+  // Stop the video if possible
+  const iframe = document.getElementById('avatarIframe');
+  iframe.src = ''; // remove the Tavus URL
+}
 </script>
 
+  <div id="avatarContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: #000;">
+  <iframe id="avatarIframe" style="width: 100%; height: 100%; border: none;"></iframe>
+</div>
 </body>
 </html>
